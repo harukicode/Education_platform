@@ -12,48 +12,33 @@ import {
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
 
-const registerSchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }),
+const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters long" }),
 });
 
-type RegisterFormValues = z.infer<typeof registerSchema>;
+type LoginFormValues = z.infer<typeof loginSchema>;
 
-export const Register = () => {
-  const form = useForm<RegisterFormValues>({
-    resolver: zodResolver(registerSchema),
+export const Login = () => {
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (data: RegisterFormValues) => {
+  const onSubmit = (data: LoginFormValues) => {
     console.log(data);
   };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-2xl font-bold">Register</h1>
+      <h1 className="text-2xl font-bold">Login</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="email"
@@ -80,15 +65,9 @@ export const Register = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Register</Button>
+          <Button type="submit">Login</Button>
         </form>
       </Form>
-      <p className="mt-4">
-        Already have an account?{" "}
-        <a href="/login" className="text-blue-500">
-          Login
-        </a>
-      </p>
     </div>
   );
 };
