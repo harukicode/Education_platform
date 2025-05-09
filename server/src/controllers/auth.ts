@@ -1,28 +1,32 @@
 import { Request, Response } from "express";
+import { LoginRequest, AuthResponse } from "../types/auth";
 import User from "../models/User";
 import * as bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { register } from "./register";
 
-export { register };
-
-export const login = async (req: Request, res: Response) => {
+export const login = async (
+  req: Request<{}, {}, LoginRequest>,
+  res: Response<AuthResponse>
+): Promise<void> => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: "Please fill all fields" });
+      res.status(400).json({ message: "Please fill all fields" });
+      return;
     }
 
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      res.status(400).json({ message: "Invalid credentials" });
+      return;
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      res.status(400).json({ message: "Invalid credentials" });
+      return;
     }
 
     const token = jwt.sign(
@@ -47,19 +51,21 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const refreshToken = async (
-  req: Request & { user?: { id: string } },
+  req: Request,
   res: Response
-) => {
+): Promise<void> => {
   try {
     const userId = req.user?.id;
 
     if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
+      res.status(401).json({ message: "Unauthorized" });
+      return;
     }
 
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: "User not found" });
+      return;
     }
 
     const token = jwt.sign(
