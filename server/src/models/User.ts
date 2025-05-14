@@ -16,6 +16,20 @@ const userSchema = new mongoose.Schema<IUser>({
     type: String,
     required: true,
   },
+  preferences: {
+    technologies: {
+      type: [String],
+      default: [],
+    },
+    languages: [{
+      type: String,
+      enum: {
+        values: ["en", "ru", "pl"],
+        message: "{VALUE} is not a supported language"
+      },
+      default: []
+    }]
+  }
 });
 
 const User = mongoose.model<IUser>("User", userSchema);

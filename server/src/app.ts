@@ -6,8 +6,7 @@ import authRoutes from "./routes/auth";
 require("dotenv").config();
 
 const PORT = process.env.PORT || 3000;
-const MONGO_URI =
-  process.env.MONGO_URI || "mongodb://localhost:27017/education_platform";
+const MONGO_URI = process.env.MONGO_URI as string;
 
 const app = express();
 

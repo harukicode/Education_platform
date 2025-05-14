@@ -3,6 +3,10 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
+  preferences?: {
+    technologies: string[];
+    languages: string[];
+  };
   createdAt?: Date;
   updatedAt?: Date;
 }
