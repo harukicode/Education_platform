@@ -3,6 +3,7 @@ import cors from "cors";
 import cookies from "cookie-parser";
 import mongoose from "mongoose";
 import authRoutes from "./routes/auth";
+import githubRoutes from './routes/github';
 require("dotenv").config();
 
 const PORT = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(cookies());
 
 app.use("/api/auth", authRoutes);
+app.use('/api/github', githubRoutes);
 
 mongoose
   .connect(MONGO_URI)
